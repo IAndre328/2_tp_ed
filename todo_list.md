@@ -29,33 +29,33 @@
   - Operações: `inserir`, `removerMax`, `tamanho`, `vazia`.
 
 ## Fase 2 — Índice (o núcleo da nota)
-- [ ] **ArvoreAVL**:
-  - [ ] nó com `poder`, `id`, `altura`, `esq` e `dir`;
-  - [ ] rotações simples e duplas;
-  - [ ] inserção com rebalanceamento;
-  - [ ] **remoção com rebalanceamento** (caso de dois filhos usando o sucessor);
-  - [ ] busca de faixa em ordem, com poda: `faixa(min, max, callback/vetor de saída)`;
-  - [ ] destrutor liberando todos os nós;
-  - [ ] contadores de comparações, rotações e altura.
-- [ ] **TabelaHash**:
-  - [ ] inserir: acha o bucket do poder e põe o id em ordem crescente (os ids chegam crescentes, então na prática é um append);
-  - [ ] remover;
-  - [ ] busca exata;
-  - [ ] **faixa**: varrer todas as entradas, filtrar `[min, max]` e ordenar por `(poder, id)` com uma ordenação própria (merge sort ou quicksort, já que `std::sort` é proibido);
-  - [ ] rehash;
-  - [ ] contadores de colisões, comparações e fator de carga.
-- [ ] **Indice** (fachada): guarda o modo atual e um ponteiro para a AVL ou para a Hash.
+- [x] **ArvoreAVL**:
+  - [x] nó com `poder`, `id`, `altura`, `esq` e `dir`;
+  - [x] rotações simples e duplas;
+  - [x] inserção com rebalanceamento;
+  - [x] **remoção com rebalanceamento** (caso de dois filhos usando o sucessor);
+  - [x] busca de faixa em ordem, com poda: `faixa(min, max, callback/vetor de saída)`;
+  - [x] destrutor liberando todos os nós;
+  - [x] contadores de comparações, rotações e altura.
+- [x] **TabelaHash**:
+  - [x] inserir: acha o bucket do poder e põe o id em ordem crescente (os ids chegam crescentes, então na prática é um append);
+  - [x] remover;
+  - [x] busca exata;
+  - [x] **faixa**: varrer todas as entradas, filtrar `[min, max]` e ordenar por `(poder, id)` com uma ordenação própria (merge sort ou quicksort, já que `std::sort` é proibido);
+  - [x] rehash;
+  - [x] contadores de colisões, comparações e fator de carga.
+- [x] **Indice** (fachada): guarda o modo atual e um ponteiro para a AVL ou para a Hash.
   - Expõe `inserir`, `remover`, `buscaExata`, `faixa` e `migrar(modo)`.
   - `migrar(modo)`: percorre a estrutura atual, insere tudo na nova e destrói a antiga. Se já estiver no modo pedido, não faz nada.
 
 ## Fase 3 — `main.cpp` (parser e saída)
 Para cada comando, escrever a saída exatamente no formato pedido, com espaços simples e sem espaço no fim da linha:
-- [ ] `E m` → migra e imprime `E m`. A primeira linha cria o índice.
+- [x] `E m` → migra e imprime `E m`. A primeira linha cria o índice.
 - [x] `A nome` → `A id`
 - [x] `C nome k pares...` → `C id poder`, e insere o cliente no índice.
 - [x] `D id` → remove do índice e imprime `D nome poder`.
-- [ ] `BP p` → `BP p cliente_1 id ...`, ou `BP p VAZIO`.
-- [ ] `BF a b` → `BF a b cliente_1 id poder ...`, ou `BF a b VAZIO`.
+- [x] `BP p` → `BP p cliente_1 id ...`, ou `BP p VAZIO`.
+- [x] `BF a b` → `BF a b cliente_1 id poder ...`, ou `BF a b VAZIO`.
 - [x] `R nome` → `R id`, mais `criar` no conjunto disjunto.
 - [x] `T u v c` → adiciona a rota no Mapa, faz `union(u, v)` e imprime `T nomeU nomeV c`.
 - [x] `CC u v` → `CC nomeU nomeV SIM` ou `NAO`, respondido via union-find.
@@ -63,8 +63,8 @@ Para cada comando, escrever a saída exatamente no formato pedido, com espaços 
 - [x] `Z k` → `Z n`, e a linha `atendimento_i id prio ...` só se `n > 0`.
 
 ## Fase 4 — Validação do código
-- [ ] Rodar o exemplo da seção 1.7 e comparar com `diff` contra a Figura 2.
-- [ ] Testar casos de borda:
+- [x] Rodar o exemplo da seção 1.7 e comparar com `diff` contra a Figura 2.
+- [x] Testar casos de borda:
   - poder negativo;
   - `C` com `k = 0`;
   - atributo repetido;
@@ -73,10 +73,10 @@ Para cada comando, escrever a saída exatamente no formato pedido, com espaços 
   - vários `E` alternados;
   - BP e BF depois de `D`;
   - cliente repetido na fila.
-- [ ] Escrever um teste aleatório que rode a mesma entrada em `E A` e em `E H` e compare as saídas, que precisam ser idênticas.
-- [ ] Rodar `make sanitize` e o valgrind para checar vazamentos e acessos inválidos.
-- [ ] Rodar `make clean && make all` com C++11, sem warnings.
-- [ ] **Submeter na VPL de testes** e depois na VPL oficial. Garanta isso cedo.
+- [x] Teste aleatório contra modelo de referência em Python (300 entradas, modos A/H, migrações) — 0 falhas.
+- [x] Rodar `make sanitize` e o valgrind para checar vazamentos e acessos inválidos.
+- [x] Rodar `make clean && make all` com C++11, sem warnings.
+- [x] **Submeter na VPL de testes** e depois na VPL oficial. Garanta isso cedo.
 
 ## Fase 5 — Instrumentação e experimentos
 - [ ] Expor os contadores nos TADs com getters e `resetarEstatisticas()`.

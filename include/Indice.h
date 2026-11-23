@@ -2,6 +2,7 @@
 #define INDICE_H
 
 #include "lib.h"
+#include "EntradaIndice.h"
 #include "ArvoreAVL.h"
 #include "TabelaHash.h"
 #include <string>
@@ -10,34 +11,21 @@
 // Indexa os clientes ativos pelo poder, em modo A (AVL) ou H (Hash),
 // permitindo migrar entre os modos sem alterar o estado logico.
 //
-// Decisoes de projeto (Fase 0):
-// - chave composta (poder, idCliente), ambos tratados como long long/int;
-//   na AVL a ordem (poder, id) ja e a ordem pedida pelo BF, e o BP vira
-//   a faixa [p, p];
-// - na Hash a chave e o poder; cada entrada guarda os ids daquele poder
-//   em ordem crescente. Colisoes por encadeamento separado; espalhamento
-//   multiplicativo (Knuth) sobre o poder convertido para unsigned long long
-//   (trata poderes negativos); rehash quando fator de carga > 0,75;
-// - BF na Hash: varre a tabela, filtra [min, max] e ordena por (poder, id)
-//   com ordenacao propria (std::sort e proibido).
-
-// Par (poder, id) devolvido pela busca por faixa.
-struct EntradaIndice {
-    long long poder;
-    int idCliente;
-
-    EntradaIndice() : poder(0), idCliente(-1) {}
-    EntradaIndice(long long p, int id) : poder(p), idCliente(id) {}
-};
-
+// Em cada momento existe exatamente uma estrutura interna (a do modo
+// atual); a outra fica nula. O main so conversa com o Indice, sem saber
+// qual estrutura esta por baixo.
+//
+// - Modo A: chave (poder, id); a ordem da arvore ja e a ordem do BF,
+//   e o BP e a faixa [p, p].
+// - Modo H: chave = poder; cada entrada guarda os ids daquele poder.
+//   Detalhes da hash em TabelaHash.h.
 class Indice {
 private:
-    std::string modo;   // "A" ou "H"; vazio antes do primeiro E
-    int tamanho;        // numero de clientes ativos indexados
+    std::string modo;       // "A" ou "H"; vazio antes do primeiro E
+    ArvoreAVL* arvore;      // != nullptr so no modo A
+    TabelaHash* tabela;     // != nullptr so no modo H
 
-    // TODO (Fase 2): ArvoreAVL* arvore; TabelaHash* tabela;
-
-    // copia proibida (o Indice sera dono das estruturas internas)
+    // copia proibida (o Indice e dono das estruturas internas)
     Indice(const Indice&);
     Indice& operator=(const Indice&);
 
@@ -59,6 +47,11 @@ public:
 
     const std::string& getModo() const;
     int getTamanho() const;
+
+    // acesso as estruturas internas para a analise experimental
+    // (devolvem nullptr se a estrutura nao for a do modo atual)
+    const ArvoreAVL* getArvore() const;
+    const TabelaHash* getTabela() const;
 };
 
 #endif // INDICE_H
