@@ -1,0 +1,125 @@
+#ifndef LIB_H
+#define LIB_H
+
+#include <cassert>
+
+namespace lib {
+
+    template <typename T>
+    class vetor {
+    private:
+        T* dados;        
+        int tamanho;     
+        int capacidade;
+
+        void dobrar_capacidade() {
+            T* temp = new T[capacidade * 2];
+            for (int i = 0; i < tamanho; i++) temp[i] = dados[i];
+            delete[] dados;
+            dados = temp;
+            capacidade = capacidade * 2;
+        }
+
+    public:
+        vetor() : dados(new T[4]), tamanho(0), capacidade(4) {} 
+        ~vetor() { delete[] dados; }
+
+        vetor(const vetor& outro)
+            : dados(new T[outro.capacidade]),
+              tamanho(outro.tamanho),
+              capacidade(outro.capacidade) {
+            for (int i = 0; i < tamanho; i++) dados[i] = outro.dados[i];
+        }
+
+        vetor& operator=(const vetor& outro) {
+            if (this != &outro) {
+                T* novo = new T[outro.capacidade];
+                for (int i = 0; i < outro.tamanho; i++) novo[i] = outro.dados[i];
+                delete[] dados;
+                dados = novo;
+                tamanho = outro.tamanho;
+                capacidade = outro.capacidade;
+            }
+            return *this;
+        }
+
+        void add_no_fim(const T& valor) {
+            if (tamanho == capacidade) dobrar_capacidade();
+            dados[tamanho] = valor;
+            tamanho++;
+        }
+
+        void rem_no_fim() {
+            if (!isEmpty()) {
+                dados[tamanho-1] = T();
+                tamanho--;   
+            }
+        }
+
+        void inserir_na_posicao(int pos, const T& valor) {
+            assert(pos >= 0 && pos <= tamanho);
+            if (tamanho == capacidade) {
+                dobrar_capacidade();
+            }
+            for (int i = tamanho; i > pos; i--) {
+                dados[i] = dados[i - 1];
+            }
+            dados[pos] = valor;
+            tamanho++;
+        }
+
+        void remover_da_posicao(int pos) {
+            assert(pos >= 0 && pos < tamanho);
+            for (int i = pos; i < tamanho - 1; i++) {
+                dados[i] = dados[i + 1];
+            }
+            dados[tamanho - 1] = T(); 
+            tamanho--;
+        }
+
+        T& getById(int id) {
+            assert(id >= 0 && id < tamanho);
+            return dados[id];
+        }
+
+        const T& getById(int id) const {
+            assert(id >= 0 && id < tamanho);
+            return dados[id];
+        }
+
+        int getTamanho() const { return tamanho; }
+        bool isEmpty() const {
+            return (tamanho == 0 || capacidade == 0);
+        }
+
+        void limpar() {
+            delete[] dados;          
+            dados = new T[4];        
+            tamanho = 0;             
+            capacidade = 4;
+        }
+    };
+
+    class pilha {
+    private:
+        vetor<int> dados;
+    public:
+        pilha() : dados() {} 
+
+        void empilhar(int valor) { dados.add_no_fim(valor); }
+        void desempilhar() { dados.rem_no_fim(); }
+
+        bool isEmpty() const { return dados.isEmpty(); }
+        int getTamanho() const { return dados.getTamanho(); }
+
+        int getById(int id) const { return dados.getById(id); }
+
+        int getTopo() const {
+            if (!isEmpty()) return dados.getById(dados.getTamanho() - 1);
+            else return -1;
+        }
+    };
+
+}
+
+#endif
