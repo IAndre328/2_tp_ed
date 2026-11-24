@@ -46,3 +46,28 @@ run:
 	./bin/tp2.out
 
 -include $(DEPS)
+# ---------------------------------------------------------------------
+# Experimentos (branch experimental; nao faz parte da entrega do VPL)
+#   make experimentos      -> compila bin/bench.out
+#   make rodar-experimentos -> roda tudo e gera CSVs + graficos
+# ---------------------------------------------------------------------
+EXP_DIR    := experimentos
+EXP_TARGET := $(BIN_DIR)/bench.out
+LIB_OBJS   := $(filter-out $(OBJ_DIR)/main.o,$(OBJS))
+
+.PHONY: experimentos rodar-experimentos
+
+experimentos: $(EXP_TARGET)
+
+$(EXP_TARGET): $(LIB_OBJS) $(OBJ_DIR)/bench.o
+	@mkdir -p $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) $^ -o $@
+
+$(OBJ_DIR)/bench.o: $(EXP_DIR)/bench.cpp
+	@mkdir -p $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -MMD -MP -c $< -o $@
+
+rodar-experimentos: $(EXP_TARGET)
+	@mkdir -p $(EXP_DIR)/resultados $(EXP_DIR)/graficos
+	./$(EXP_TARGET) todos $(EXP_DIR)/resultados 3
+	PYTHONPATH=$(EXP_DIR)/.pylibs python3 $(EXP_DIR)/graficos.py

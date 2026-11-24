@@ -92,6 +92,9 @@ namespace lib {
             return (tamanho == 0 || capacidade == 0);
         }
 
+        // zera o tamanho sem liberar memoria (reuso em lacos medidos)
+        void esvaziar() { tamanho = 0; }
+
         void limpar() {
             delete[] dados;          
             dados = new T[4];        

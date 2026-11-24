@@ -79,17 +79,17 @@ Para cada comando, escrever a saída exatamente no formato pedido, com espaços 
 - [x] **Submeter na VPL de testes** e depois na VPL oficial. Garanta isso cedo.
 
 ## Fase 5 — Instrumentação e experimentos
-- [ ] Expor os contadores nos TADs com getters e `resetarEstatisticas()`.
-- [ ] Criar um binário ou flag separada para os experimentos, para não poluir a saída do VPL. Usar `clock_gettime` ou `chrono` fora dos laços de alocação.
-- [ ] Escrever um gerador de entradas parametrizável: nº de clientes, % de remoções, nº de poderes distintos, nº de regiões e rotas, mistura de operações.
-- [ ] Rodar os experimentos:
+- [x] Expor os contadores nos TADs com getters e `resetarEstatisticas()`.
+- [x] Criar um binário ou flag separada para os experimentos, para não poluir a saída do VPL. Usar `clock_gettime` ou `chrono` fora dos laços de alocação.
+- [x] Escrever um gerador de entradas parametrizável: nº de clientes, % de remoções, nº de poderes distintos, nº de regiões e rotas, mistura de operações.
+- [x] Rodar os experimentos:
   1. AVL × Hash por operação (inserção, remoção, BP, BF) e custo da migração;
   2. só entradas × entradas e saídas (rotatividade);
   3. perfil com predominância de atualizações × perfil com predominância de consultas;
   4. CC com union-find × CC com BFS, em mapas esparsos e densos, separando construção de consulta;
   5. variação de parâmetros;
   6. coletar comparações, rotações, colisões, altura, regiões visitadas e memória.
-- [ ] Gerar os gráficos (Python/matplotlib) e as tabelas.
+- [x] Gerar os gráficos (Python/matplotlib) e as tabelas. → `experimentos/graficos/*.pdf`, `experimentos/resultados/resumo.md`, metodologia em `experimentos/README.md`.
 
 ## Fase 6 — Relatório (template AAAI no Overleaf)
 - [ ] Resumo
