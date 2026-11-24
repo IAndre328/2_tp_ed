@@ -101,12 +101,12 @@ Tempo total da bateria completa: cerca de 2 minutos.
 Os números completos estão em `resultados/resumo.md`.
 
 1. **Hash vence nas operações pontuais.**
-   - Inserção, remoção e BP ficam de 2,4 a 15 vezes mais rápidas na hash.
+   - Inserção, remoção e BP ficam de 2,5 a 15 vezes mais rápidas na hash.
    - Ela faz cerca de 1 comparação por operação, contra cerca de log₂ n na AVL (de 9 a 20).
    - A diferença no BP cresce com n, porque descer a AVL é uma sequência de acessos a nós espalhados pela memória.
 2. **AVL vence com folga no BF.**
    - Para faixas de 1%, a AVL é de 30 a 80 vezes mais rápida.
-   - Faixas estreitas (0,01%) ampliam a diferença para cerca de 3900 vezes.
+   - Faixas estreitas (0,01%) ampliam a diferença para cerca de 4400 vezes.
    - O BF na hash custa O(M + n) **independente da largura**: precisa varrer a tabela inteira e depois ordenar.
 3. **A remoção é onde as estruturas mais divergem, e a divergência depende da distribuição dos poderes (Exp. 5a).**
    - Com poderes quase todos distintos, a remoção na hash é cerca de 3 vezes mais rápida.
@@ -124,6 +124,6 @@ Os números completos estão em `resultados/resumo.md`.
 7. **Conectividade.**
    - O Union-Find responde em cerca de 10 ns, independente do tamanho e da densidade, porque com compressão de caminho faz no máximo cerca de 2 passos por consulta.
    - A BFS custa O(V + E) por consulta assim que o grafo passa do grau 1: até 12 ms com 10⁵ regiões.
-   - Na construção, o Union-Find também é mais barato (6–31 ns por elemento) que montar as listas de adjacência (31–216 ns).
+   - Na construção, o Union-Find também é mais barato (6–33 ns por elemento) que montar as listas de adjacência (31–220 ns).
    - A BFS só é competitiva em mapas muito esparsos (grau < 1), em que quase nada é alcançável.
 8. **Migração.** Construir a AVL (H→A) custa cerca do dobro de construir a hash (A→H): O(n log n) contra O(n). Com 10⁶ clientes, a migração leva 0,85 s e 0,46 s, respectivamente.
