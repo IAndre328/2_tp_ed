@@ -11,9 +11,7 @@ void ArvoreAVL::destruirRec(NoAVL* n) {
     delete n;
 }
 
-// ---------------------------------------------------------------------
 // Altura e balanceamento
-// ---------------------------------------------------------------------
 
 int ArvoreAVL::altura(const NoAVL* n) const {
     return (n == nullptr) ? 0 : n->altura;
@@ -86,9 +84,9 @@ int ArvoreAVL::comparar(long long poder, int id, const NoAVL* n) {
     return 0;
 }
 
-// ---------------------------------------------------------------------
+
 // Insercao
-// ---------------------------------------------------------------------
+
 
 NoAVL* ArvoreAVL::inserirRec(NoAVL* n, long long poder, int id, bool& inseriu) {
     if (n == nullptr) {
@@ -110,9 +108,9 @@ bool ArvoreAVL::inserir(long long poder, int id) {
     return inseriu;
 }
 
-// ---------------------------------------------------------------------
+
 // Remocao
-// ---------------------------------------------------------------------
+
 
 // Tira o menor no da subarvore n (sem apaga-lo), devolvendo-o em 'minimo'.
 // Devolve a nova raiz da subarvore, ja rebalanceada.
@@ -161,12 +159,8 @@ bool ArvoreAVL::remover(long long poder, int id) {
     return removeu;
 }
 
-// ---------------------------------------------------------------------
 // Buscas
-// ---------------------------------------------------------------------
 
-// Percurso em ordem com poda: so desce para a esquerda se ainda pode
-// haver chave >= min, e so para a direita se ainda pode haver <= max.
 void ArvoreAVL::faixaRec(NoAVL* n, long long min, long long max,
                          lib::vetor<EntradaIndice>& saida) {
     if (n == nullptr) return;
@@ -198,9 +192,8 @@ void ArvoreAVL::listarTodos(lib::vetor<EntradaIndice>& saida) {
     faixaRec(raiz, menor->poder, maior->poder, saida);
 }
 
-// ---------------------------------------------------------------------
+
 // Consultas e verificacao
-// ---------------------------------------------------------------------
 
 int ArvoreAVL::getTamanho() const { return tamanho; }
 

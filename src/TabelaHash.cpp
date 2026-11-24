@@ -21,9 +21,7 @@ TabelaHash::~TabelaHash() {
     delete[] baldes;
 }
 
-// ---------------------------------------------------------------------
 // Funcao de espalhamento e rehash
-// ---------------------------------------------------------------------
 
 // Hash multiplicativo (Knuth): multiplica pela constante 2^64 / phi e
 // usa os 'bitsBaldes' bits mais altos do produto como indice do balde.
@@ -34,7 +32,6 @@ int TabelaHash::posicao(long long poder) const {
 }
 
 // Dobra o numero de baldes e religa cada no no seu novo balde.
-// Os nos sao reaproveitados (so os ponteiros mudam).
 void TabelaHash::rehash() {
     int antigoNum = numBaldes;
     NoHash** antigos = baldes;
@@ -49,7 +46,7 @@ void TabelaHash::rehash() {
         while (atual != nullptr) {
             NoHash* prox = atual->prox;
             int p = posicao(atual->poder);
-            atual->prox = baldes[p];     // insere no inicio da nova lista
+            atual->prox = baldes[p];    
             baldes[p] = atual;
             atual = prox;
         }
@@ -68,15 +65,12 @@ NoHash* TabelaHash::buscarNo(long long poder) {
     return nullptr;
 }
 
-// ---------------------------------------------------------------------
 // Insercao e remocao
-// ---------------------------------------------------------------------
 
 bool TabelaHash::inserir(long long poder, int id) {
     NoHash* no = buscarNo(poder);
 
     if (no == nullptr) {
-        // poder novo: cria a entrada no inicio da lista do balde
         int p = posicao(poder);
         if (baldes[p] != nullptr) numColisoes++;
         no = new NoHash(poder);
@@ -85,8 +79,7 @@ bool TabelaHash::inserir(long long poder, int id) {
         numChaves++;
     }
 
-    // insere o id mantendo a ordem crescente. Os ids chegam quase sempre
-    // em ordem crescente, entao a busca de tras para frente para logo.
+    // insere o id mantendo a ordem crescente.
     lib::vetor<int>& ids = no->ids;
     int pos = ids.getTamanho();
     while (pos > 0 && ids.getById(pos - 1) > id) pos--;
@@ -111,7 +104,6 @@ bool TabelaHash::remover(long long poder, int id) {
     }
     if (atual == nullptr) return false;
 
-    // busca binaria do id na lista ordenada de ids
     lib::vetor<int>& ids = atual->ids;
     int ini = 0, fim = ids.getTamanho() - 1, achou = -1;
     while (ini <= fim) {
@@ -135,9 +127,7 @@ bool TabelaHash::remover(long long poder, int id) {
     return true;
 }
 
-// ---------------------------------------------------------------------
 // Buscas
-// ---------------------------------------------------------------------
 
 void TabelaHash::buscaExata(long long poder, lib::vetor<int>& saida) {
     NoHash* no = buscarNo(poder);
@@ -145,7 +135,7 @@ void TabelaHash::buscaExata(long long poder, lib::vetor<int>& saida) {
     for (int i = 0; i < no->ids.getTamanho(); i++) saida.add_no_fim(no->ids.getById(i));
 }
 
-// Ordena v[ini..fim] por poder (estavel, O(d log d)).
+// Ordena por poder
 void TabelaHash::mergeSort(lib::vetor<NoHash*>& v, lib::vetor<NoHash*>& aux, int ini, int fim) {
     if (ini >= fim) return;
     int meio = (ini + fim) / 2;
@@ -164,7 +154,6 @@ void TabelaHash::mergeSort(lib::vetor<NoHash*>& v, lib::vetor<NoHash*>& aux, int
 }
 
 void TabelaHash::buscaFaixa(long long min, long long max, lib::vetor<EntradaIndice>& saida) {
-    // 1) varre todos os baldes e separa as entradas cujo poder esta na faixa
     lib::vetor<NoHash*> selecionados;
     for (int i = 0; i < numBaldes; i++) {
         for (NoHash* atual = baldes[i]; atual != nullptr; atual = atual->prox) {
@@ -174,11 +163,9 @@ void TabelaHash::buscaFaixa(long long min, long long max, lib::vetor<EntradaIndi
     }
     if (selecionados.isEmpty()) return;
 
-    // 2) ordena as entradas por poder (cada uma tem poder distinto)
     lib::vetor<NoHash*> aux = selecionados;
     mergeSort(selecionados, aux, 0, selecionados.getTamanho() - 1);
 
-    // 3) expande: dentro de cada entrada os ids ja estao em ordem crescente
     for (int i = 0; i < selecionados.getTamanho(); i++) {
         NoHash* no = selecionados.getById(i);
         for (int j = 0; j < no->ids.getTamanho(); j++) {
@@ -197,9 +184,7 @@ void TabelaHash::listarTodos(lib::vetor<EntradaIndice>& saida) {
     }
 }
 
-// ---------------------------------------------------------------------
 // Consultas e instrumentacao
-// ---------------------------------------------------------------------
 
 int TabelaHash::getTamanho() const { return numElementos; }
 int TabelaHash::getNumChaves() const { return numChaves; }

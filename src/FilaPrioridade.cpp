@@ -15,7 +15,7 @@ void FilaPrioridade::trocar(int i, int j) {
     numTrocas++;
 }
 
-// sobe o item da posicao i enquanto ele vier antes do pai
+// sobe enquanto ele vier antes do pai
 void FilaPrioridade::subir(int i) {
     while (i > 0) {
         int p = (i - 1) / 2;

@@ -7,17 +7,14 @@ Indice::~Indice() {
     delete tabela;
 }
 
-// Copia todos os pares da estrutura atual para a nova e destroi a antiga.
-// Custo: O(n) para listar + O(n log n) (para AVL) ou O(n) medio (para Hash).
 void Indice::migrarPara(const std::string& novoModo) {
     if (novoModo == modo) return;   // ja esta no modo pedido
 
-    // 1) lista todos os clientes da estrutura atual (vazio no 1o E)
+    
     lib::vetor<EntradaIndice> todos;
     if (arvore != nullptr) arvore->listarTodos(todos);
     if (tabela != nullptr) tabela->listarTodos(todos);
 
-    // 2) cria a nova estrutura e insere todos
     ArvoreAVL* novaArvore = nullptr;
     TabelaHash* novaTabela = nullptr;
     if (novoModo == "A") {
@@ -30,7 +27,6 @@ void Indice::migrarPara(const std::string& novoModo) {
             novaTabela->inserir(todos.getById(i).poder, todos.getById(i).idCliente);
     }
 
-    // 3) descarta a estrutura antiga
     delete arvore;
     delete tabela;
     arvore = novaArvore;

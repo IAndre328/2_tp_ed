@@ -7,25 +7,12 @@
 #include "TabelaHash.h"
 #include <string>
 
-// TAD Indice
-// Indexa os clientes ativos pelo poder, em modo A (AVL) ou H (Hash),
-// permitindo migrar entre os modos sem alterar o estado logico.
-//
-// Em cada momento existe exatamente uma estrutura interna (a do modo
-// atual); a outra fica nula. O main so conversa com o Indice, sem saber
-// qual estrutura esta por baixo.
-//
-// - Modo A: chave (poder, id); a ordem da arvore ja e a ordem do BF,
-//   e o BP e a faixa [p, p].
-// - Modo H: chave = poder; cada entrada guarda os ids daquele poder.
-//   Detalhes da hash em TabelaHash.h.
 class Indice {
 private:
     std::string modo;       // "A" ou "H"; vazio antes do primeiro E
-    ArvoreAVL* arvore;      // != nullptr so no modo A
-    TabelaHash* tabela;     // != nullptr so no modo H
+    ArvoreAVL* arvore;     
+    TabelaHash* tabela;    
 
-    // copia proibida (o Indice e dono das estruturas internas)
     Indice(const Indice&);
     Indice& operator=(const Indice&);
 
@@ -33,7 +20,6 @@ public:
     Indice();
     ~Indice();
 
-    // troca a estrutura interna para "A" ou "H", preservando os clientes
     void migrarPara(const std::string& novoModo);
 
     void inserir(long long poder, int idCliente);
@@ -54,4 +40,4 @@ public:
     const TabelaHash* getTabela() const;
 };
 
-#endif // INDICE_H
+#endif

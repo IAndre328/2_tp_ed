@@ -3,19 +3,15 @@
 
 #include "lib.h"
 
-// TAD Conjuntos Disjuntos (Union-Find)
+
 // Mantem as regioes agrupadas por conectividade.
-//
-// - pai[x]  : pai de x na arvore do conjunto (raiz aponta para si mesma)
-// - rank[x] : limite superior da altura da arvore enraizada em x
-// Usa compressao de caminho no encontrar e uniao por rank no unir, o que
-// da custo amortizado praticamente constante (O(alfa(n))) por operacao.
+
 class ConjuntosDisjuntos {
 private:
     lib::vetor<int> pai;
     lib::vetor<int> rank;
 
-    // instrumentacao (analise experimental)
+    // Contadores (analise experimental)
     long long numBuscas;    // chamadas de encontrar
     long long numPassos;    // saltos de pai percorridos nas buscas
     long long numUnioes;    // unioes que efetivamente juntaram dois conjuntos
@@ -37,7 +33,7 @@ public:
 
     int getTamanho() const;
 
-    // instrumentacao
+    // Contadores
     long long getNumBuscas() const;
     long long getNumPassos() const;
     long long getNumUnioes() const;
@@ -45,4 +41,4 @@ public:
     void resetarEstatisticas();
 };
 
-#endif // CONJUNTOSDISJUNTOS_H
+#endif

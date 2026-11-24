@@ -4,9 +4,7 @@
 #include "lib.h"
 #include "EntradaIndice.h"
 
-// No da AVL. A chave e o par (poder, id): como o id e unico, nao ha
-// chaves repetidas, e o percurso em ordem ja sai ordenado por poder e,
-// em empate, por id (exatamente a ordem pedida pelo BF).
+
 struct NoAVL {
     long long poder;
     int id;
@@ -18,15 +16,12 @@ struct NoAVL {
 };
 
 // TAD Arvore AVL (Modo A)
-// Arvore binaria de busca balanceada por altura: em todo no, as alturas
-// das subarvores esquerda e direita diferem de no maximo 1. Isso garante
-// altura O(log n) e, portanto, inserir/remover/buscar em O(log n).
 class ArvoreAVL {
 private:
     NoAVL* raiz;
     int tamanho;
 
-    // instrumentacao
+    // Contadores
     long long numComparacoes;   // comparacoes de chave
     long long numRotacoes;      // rotacoes simples (uma dupla conta 2)
 
@@ -38,7 +33,6 @@ private:
     NoAVL* rotacaoEsquerda(NoAVL* x);
     NoAVL* balancear(NoAVL* n);
 
-    // <0 se (poder,id) vem antes do no, 0 se igual, >0 se vem depois
     int comparar(long long poder, int id, const NoAVL* n);
 
     NoAVL* inserirRec(NoAVL* n, long long poder, int id, bool& inseriu);
@@ -48,7 +42,6 @@ private:
     void destruirRec(NoAVL* n);
     int verificarRec(const NoAVL* n, bool& ok) const;
 
-    // copia proibida (a arvore e dona dos nos)
     ArvoreAVL(const ArvoreAVL&);
     ArvoreAVL& operator=(const ArvoreAVL&);
 
@@ -60,13 +53,13 @@ public:
     bool inserir(long long poder, int id);
     bool remover(long long poder, int id);
 
-    // ids com poder == p, em ordem crescente de id
+    // Em ordem crescente de id
     void buscaExata(long long poder, lib::vetor<int>& saida);
 
-    // pares com poder em [min, max], em ordem (poder, id)
+    // Pares com poder em [min, max], em ordem (poder, id)
     void buscaFaixa(long long min, long long max, lib::vetor<EntradaIndice>& saida);
 
-    // todos os pares em ordem (usado na migracao)
+    // Preparar para migração (em ordem)
     void listarTodos(lib::vetor<EntradaIndice>& saida);
 
     int getTamanho() const;
@@ -75,11 +68,11 @@ public:
     // confere ordem e balanceamento de todos os nos (para testes)
     bool verificar() const;
 
-    // instrumentacao
+    // Contadores
     long long getNumComparacoes() const;
     long long getNumRotacoes() const;
     long long getMemoriaBytes() const;
     void resetarEstatisticas();
 };
 
-#endif // ARVOREAVL_H
+#endif 

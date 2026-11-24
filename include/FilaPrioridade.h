@@ -3,8 +3,6 @@
 
 #include "lib.h"
 
-// Elemento da fila: um cliente aguardando com uma prioridade.
-// O mesmo cliente pode aparecer varias vezes (uma por entrada na fila).
 struct ItemFila {
     long long prioridade;
     int idCliente;
@@ -13,15 +11,11 @@ struct ItemFila {
     ItemFila(long long p, int id) : prioridade(p), idCliente(id) {}
 };
 
-// TAD Fila de Prioridade
-// Heap binario de maximo armazenado em vetor (filhos de i: 2i+1 e 2i+2).
-// Ordem: maior prioridade primeiro; em empate, menor id de cliente.
-// inserir e removerMax custam O(log n).
 class FilaPrioridade {
 private:
     lib::vetor<ItemFila> heap;
 
-    // instrumentacao
+    // Contadores
     long long numComparacoes;
     long long numTrocas;
 
@@ -43,11 +37,11 @@ public:
     int getTamanho() const;
     bool vazia() const;
 
-    // instrumentacao
+    // Contadores
     long long getNumComparacoes() const;
     long long getNumTrocas() const;
     long long getMemoriaBytes() const;
     void resetarEstatisticas();
 };
 
-#endif // FILAPRIORIDADE_H
+#endif

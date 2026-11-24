@@ -4,9 +4,7 @@
 #include "lib.h"
 #include "EntradaIndice.h"
 
-// Entrada da tabela: um poder distinto e todos os ids de clientes ativos
-// com esse poder, em ordem crescente. 'prox' encadeia as entradas que
-// cairam no mesmo balde (encadeamento separado).
+
 struct NoHash {
     long long poder;
     lib::vetor<int> ids;
@@ -15,21 +13,6 @@ struct NoHash {
     NoHash(long long p) : poder(p), ids(), prox(nullptr) {}
 };
 
-// TAD Tabela Hash (Modo H)
-//
-// - Chave: o poder. Varios clientes com o mesmo poder ficam na mesma entrada.
-// - Colisoes: encadeamento separado. A remocao e simples (tira o no da
-//   lista), sem as "lapides" que o enderecamento aberto exigiria.
-// - Espalhamento: multiplicativo de Knuth. O poder e convertido para
-//   unsigned long long (poderes negativos viram inteiros validos),
-//   multiplicado por 2^64/phi e os bits mais altos dao o balde. O numero
-//   de baldes e potencia de 2, entao nao ha divisao.
-// - Fator de carga (entradas / baldes) limitado a 0,75: ao passar disso,
-//   o numero de baldes dobra e tudo e redistribuido (rehash).
-//
-// Busca exata, insercao e remocao: O(1) em media.
-// Busca por faixa: a tabela nao guarda ordem, entao e preciso varrer todos
-// os baldes e ordenar o resultado (merge sort): O(M + n + d log d).
 class TabelaHash {
 private:
     NoHash** baldes;
@@ -38,7 +21,7 @@ private:
     int numChaves;      // entradas (poderes distintos)
     int numElementos;   // clientes (pares poder, id)
 
-    // instrumentacao
+    // Contadores
     long long numComparacoes;   // comparacoes de chave ao percorrer listas
     long long numColisoes;      // novas entradas em balde ja ocupado
     long long numRehash;
@@ -49,7 +32,6 @@ private:
 
     void mergeSort(lib::vetor<NoHash*>& v, lib::vetor<NoHash*>& aux, int ini, int fim);
 
-    // copia proibida (a tabela e dona dos nos)
     TabelaHash(const TabelaHash&);
     TabelaHash& operator=(const TabelaHash&);
 
@@ -67,7 +49,7 @@ public:
     // pares com poder em [min, max], em ordem (poder, id)
     void buscaFaixa(long long min, long long max, lib::vetor<EntradaIndice>& saida);
 
-    // todos os pares, sem ordem definida (usado na migracao)
+    // Preparar para migrar
     void listarTodos(lib::vetor<EntradaIndice>& saida);
 
     int getTamanho() const;         // numero de clientes
@@ -75,7 +57,7 @@ public:
     int getNumBaldes() const;
     int getMaiorBalde() const;      // comprimento da maior lista
 
-    // instrumentacao
+    // Contadores
     long long getNumComparacoes() const;
     long long getNumColisoes() const;
     long long getNumRehash() const;
@@ -83,4 +65,4 @@ public:
     void resetarEstatisticas();
 };
 
-#endif // TABELAHASH_H
+#endif
